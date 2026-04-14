@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Drive Image Tool</title>
+
+<style>
+body { background:#0f172a; color:white; text-align:center; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,120px); gap:10px; }
+img { width:100%; border-radius:10px; }
+button { margin-top:5px; }
+</style>
+
+</head>
+<body>
+
+<h1>📸 Tool tải ảnh Drive</h1>
+
+<input id="link" placeholder="Dán link folder Drive">
+<button onclick="load()">Load</button>
+
+<div id="grid" class="grid"></div>
+
+<script>
+async function load() {
+    const link = document.getElementById("link").value;
+
+    const res = await fetch(`/api/images?link=${link}`);
+    const data = await res.json();
+
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    data.forEach(f => {
+        const url = `https://drive.google.com/uc?id=${f.id}`;
+
+        grid.innerHTML += `
+        <div>
+            <img src="${url}">
+            <br>
+            <a href="${url}" download>
+                <button>Tải</button>
+            </a>
+        </div>`;
+    });
+}
+</script>
+
+</body>
+</html>
